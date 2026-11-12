@@ -11,8 +11,8 @@
 	<groupId>com.tomasmendez</groupId>
 	<artifactId>picadito</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+    <name>picadito</name>
+    <description>REST API for booking padel and 5-a-side football courts</description>
 	<url/>
 	<licenses>
 		<license/>
