@@ -11,9 +11,11 @@ courts, opening hours and pricing.
 - Java 21
 - Spring Boot 4
 - Maven
+- PostgreSQL
+- Flyway
+- Docker
 
-More tools will be added as the project evolves (PostgreSQL, Flyway, Spring Security + JWT,
-Docker, GitHub Actions, Testcontainers).
+More tools will be added as the project evolves (Spring Security + JWT, GitHub Actions, Testcontainers).
 
 ## Architecture
 
@@ -33,12 +35,22 @@ to a business capability lives together:
 
 ## Running locally
 
-Requirements: JDK 21.
+Requirements: JDK 21 and Docker.
 
-```bash
-./mvnw spring-boot:run
-```
+1. Copy the environment template and set a password:
+   ```bash
+   cp .env.example .env
+   ```
+2. Start PostgreSQL:
+   ```bash
+   docker compose up -d
+   ```
+3. Run the application (the `dev` profile is active by default):
+   ```bash
+   ./mvnw spring-boot:run
+   ```
 
+Database migrations are applied automatically by Flyway on startup.
 The API starts on `http://localhost:8080`.
 
 ## Author
