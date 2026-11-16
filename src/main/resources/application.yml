@@ -1,3 +1,10 @@
 spring:
   application:
     name: picadito
+  profiles:
+    default: dev
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
