@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17
+    image: postgres:17-bookworm
     container_name: picadito-db
     environment:
       POSTGRES_DB: ${DB_NAME}
