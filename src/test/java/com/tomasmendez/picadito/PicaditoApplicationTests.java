@@ -10,4 +10,9 @@ class PicaditoApplicationTests {
 	void contextLoads() {
 	}
 
+    @Test
+    void ciShouldFail() {
+        org.junit.jupiter.api.Assertions.fail("Testing that CI blocks the merge");
+    }
+
 }
