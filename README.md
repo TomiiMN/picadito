@@ -1,5 +1,7 @@
 # Picadito
 
+[![CI](https://github.com/TomiiMN/picadito/actions/workflows/ci.yml/badge.svg)](https://github.com/TomiiMN/picadito/actions/workflows/ci.yml)
+
 REST API for booking padel and 5-a-side football courts. Players search for clubs, check
 available time slots and book a court with a deposit payment; club owners manage their
 courts, opening hours and pricing.
@@ -14,8 +16,9 @@ courts, opening hours and pricing.
 - PostgreSQL
 - Flyway
 - Docker
+- GitHub Actions
 
-More tools will be added as the project evolves (Spring Security + JWT, GitHub Actions, Testcontainers).
+More tools will be added as the project evolves (Spring Security + JWT, Testcontainers).
 
 ## Architecture
 
