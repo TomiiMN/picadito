@@ -7,4 +7,6 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-
+  web:
+    resources:
+      add-mappings: false
