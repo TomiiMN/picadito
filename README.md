@@ -17,6 +17,7 @@ courts, opening hours and pricing.
 - Flyway
 - Docker
 - GitHub Actions
+- springdoc OpenAPI (Swagger UI)
 
 More tools will be added as the project evolves (Spring Security + JWT, Testcontainers).
 
@@ -55,6 +56,7 @@ Requirements: JDK 21 and Docker.
 
 Database migrations are applied automatically by Flyway on startup.
 The API starts on `http://localhost:8080`.
+Interactive API documentation is available at `http://localhost:8080/swagger-ui.html`.
 
 ## Author
 
