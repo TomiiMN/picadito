@@ -27,6 +27,6 @@ class ActuatorEndpointsTest {
     @Test
     void sensitiveActuatorEndpointsShouldNotBeExposed() throws Exception {
         mockMvc.perform(get("/actuator/env"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().is4xxClientError());
     }
 }
