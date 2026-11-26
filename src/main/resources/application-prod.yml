@@ -5,3 +5,6 @@ spring:
     password: ${DB_PASSWORD}
 server:
     port: ${PORT:8080}
+picadito:
+  jwt:
+    secret: ${JWT_SECRET}
