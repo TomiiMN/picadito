@@ -9,8 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.Instant;
 
+import com.tomasmendez.picadito.auth.dto.AuthResponse;
 import com.tomasmendez.picadito.shared.exception.ConflictException;
 import com.tomasmendez.picadito.shared.exception.ErrorCode;
+import com.tomasmendez.picadito.shared.exception.InvalidCredentialsException;
 import com.tomasmendez.picadito.user.Role;
 import com.tomasmendez.picadito.user.dto.UserResponse;
 import org.junit.jupiter.api.Test;
@@ -74,5 +76,35 @@ class AuthControllerTest {
                         .content(VALID_REQUEST))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("EMAIL_ALREADY_REGISTERED"));
+    }
+
+    @Test
+    void shouldReturn200WithTokenWhenLoginSucceeds() throws Exception {
+        given(authService.login(any())).willReturn(
+                new AuthResponse("jwt-token", "Bearer", Instant.parse("2026-12-01T12:00:00Z")));
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {"email": "ana@mail.com", "password": "secret123"}
+                            """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").value("jwt-token"))
+                .andExpect(jsonPath("$.tokenType").value("Bearer"))
+                .andExpect(jsonPath("$.expiresAt").exists());
+    }
+
+    @Test
+    void shouldReturn401WithGenericMessageWhenCredentialsAreInvalid() throws Exception {
+        given(authService.login(any())).willThrow(new InvalidCredentialsException());
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {"email": "ana@mail.com", "password": "wrong-password"}
+                            """))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("INVALID_CREDENTIALS"))
+                .andExpect(jsonPath("$.detail").value("Invalid email or password"));
     }
 }
