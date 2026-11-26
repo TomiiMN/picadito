@@ -42,6 +42,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "The request conflicts with existing data");
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    ProblemDetail handleInvalidCredentials(InvalidCredentialsException ex) {
+        return problem(HttpStatus.UNAUTHORIZED, ex.getErrorCode(), ex.getMessage());
+    }
+
     // ---------- Fallback ----------
 
     @ExceptionHandler(Exception.class)
