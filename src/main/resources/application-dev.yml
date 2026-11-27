@@ -8,3 +8,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
+picadito:
+  jwt:
+    secret: ${JWT_SECRET:IcNvC7wkJoJd/7V8AOop4luXhFni04lJxwTVTSRERiw=}

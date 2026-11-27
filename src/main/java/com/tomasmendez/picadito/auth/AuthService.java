@@ -2,9 +2,12 @@ package com.tomasmendez.picadito.auth;
 
 import java.util.Locale;
 
+import com.tomasmendez.picadito.auth.dto.AuthResponse;
+import com.tomasmendez.picadito.auth.dto.LoginRequest;
 import com.tomasmendez.picadito.auth.dto.RegisterRequest;
 import com.tomasmendez.picadito.shared.exception.ConflictException;
 import com.tomasmendez.picadito.shared.exception.ErrorCode;
+import com.tomasmendez.picadito.shared.exception.InvalidCredentialsException;
 import com.tomasmendez.picadito.user.Role;
 import com.tomasmendez.picadito.user.User;
 import com.tomasmendez.picadito.user.UserRepository;
@@ -22,15 +25,20 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
+    private final String dummyPasswordHash;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       TokenService tokenService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
+        this.dummyPasswordHash = passwordEncoder.encode("dummy-password-for-timing-protection");
     }
 
     @Transactional
     public UserResponse register(RegisterRequest request) {
-        String email = request.email().trim().toLowerCase(Locale.ROOT);
+        String email = normalizeEmail(request.email());
 
         if (userRepository.existsByEmail(email)) {
             throw new ConflictException(ErrorCode.EMAIL_ALREADY_REGISTERED,
@@ -47,5 +55,25 @@ public class AuthService {
         User saved = userRepository.save(user);
         log.info("New player registered with id {}", saved.getId());
         return UserResponse.from(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public AuthResponse login(LoginRequest request) {
+        User user = userRepository.findByEmail(normalizeEmail(request.email())).orElse(null);
+
+        String hashToCheck = user != null ? user.getPasswordHash() : dummyPasswordHash;
+        boolean passwordMatches = passwordEncoder.matches(request.password(), hashToCheck);
+
+        if (user == null || !passwordMatches) {
+            log.warn("Failed login attempt");
+            throw new InvalidCredentialsException();
+        }
+
+        log.info("User {} logged in", user.getId());
+        return tokenService.issueToken(user);
+    }
+
+    private String normalizeEmail(String email) {
+        return email.trim().toLowerCase(Locale.ROOT);
     }
 }

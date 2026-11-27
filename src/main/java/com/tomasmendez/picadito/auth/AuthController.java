@@ -1,5 +1,7 @@
 package com.tomasmendez.picadito.auth;
 
+import com.tomasmendez.picadito.auth.dto.AuthResponse;
+import com.tomasmendez.picadito.auth.dto.LoginRequest;
 import com.tomasmendez.picadito.auth.dto.RegisterRequest;
 import com.tomasmendez.picadito.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,5 +34,13 @@ public class AuthController {
     @ApiResponse(responseCode = "409", description = "Email already registered")
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Log in and obtain an access token")
+    @ApiResponse(responseCode = "200", description = "Authenticated")
+    @ApiResponse(responseCode = "401", description = "Invalid email or password")
+    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 }
