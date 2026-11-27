@@ -24,7 +24,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AuthController.class)
-@Import(SecurityConfig.class)
+@Import(WebSecurityTestConfig.class)
 class AuthControllerTest {
 
     private static final String VALID_REQUEST = """
